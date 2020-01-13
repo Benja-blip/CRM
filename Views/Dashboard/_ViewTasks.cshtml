@@ -1,0 +1,44 @@
+@model IEnumerable<CRM3.Models.Tasks>
+
+@{
+    ViewData["Title"] = "_ViewTasks";
+}
+
+<div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deadline)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Important)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HighComplexity)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deadline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Important)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HighComplexity)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.TaskName">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.TaskName">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.TaskName">Delete</a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>

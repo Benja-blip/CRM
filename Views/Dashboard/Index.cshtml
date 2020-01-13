@@ -1,0 +1,169 @@
+@model IEnumerable<CRM3.Models.Tasks>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">Dashboard</h1>
+
+<div class="container mt-4">
+<p>
+    <a asp-action="Create">Create New Task</a>
+</p>
+<p>
+    <a asp-controller="Companies" asp-action="Index">Go to Companies</a>
+</p>
+
+<table class="table" id="tbl">
+    <thead>
+        <tr class="row">
+            <th class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TaskName)
+            </th>
+            <th class="col-sm-1">
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th class="col-sm-1">
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th class="col-sm-1">
+                @Html.DisplayNameFor(model => model.Important)
+            </th>
+            <th class="col-sm-2">
+                @Html.DisplayNameFor(model => model.HighComplexity)
+            </th>
+            <th class="col-sm-2">
+                Options
+            </th>
+            <th class="col-sm-3 text-center">
+                Time Elapsed
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="row" id="tablerow">
+            <td class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.TaskName)
+            </td>
+            <td class="col-sm-1">
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td class="col-sm-1">
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td class="col-sm-1">
+                @Html.DisplayFor(modelItem => item.Important)
+            </td>
+            <td class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.HighComplexity)
+            </td>
+            <td class="col-sm-1">
+                <a asp-action="Edit" asp-route-id="@item.TaskName">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TaskName">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TaskName">Delete</a>
+            </td>
+            <td class="col-sm-4">
+                <div id="progressBar">
+                    <div class="bar" id="actualBar"></div>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+
+<style>
+#progressBar {
+  border-radius: 15px;
+  width: 90%;
+  margin: 5px auto;
+  height: 20px;
+  background-color: grey;
+}
+</style>
+<style>
+#progressBar div {
+  border-radius: 15px;
+  height: 100%;
+  text-align: right;
+  padding: 5px;
+  line-height: 20px; /* same as #progressBar height if we want text middle aligned */
+  width: function fillBar(timeElapsedPercent);
+  background-color: whitesmoke;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+		
+var Table = document.getElementById("tbl");
+var Row = document.getElementsByTagName("tr");
+var rowDisplay = document.getElementsByTagName("td");
+
+function fillBar() {
+
+        //console.log(taskName);
+
+    const interval = setInterval(() => {
+
+        var i;
+        //var bar = document.querySelectorAll('.bar'), i;
+
+        for (i = 1; i < Table.rows.length; i += 1) {
+            var taskName = Table.rows[i].cells[0].innerText;
+            var rawDeadline = Table.rows[i].cells[1].innerText;
+            var rawStartTime = Table.rows[i].cells[2].innerText;
+            var bar = Table.rows[i].cells[6].getElementsByClassName("bar").item(0);
+            console.log(bar)
+            //var bar = document.querySelectorAll('.bar');
+            var now = new Date();
+            var startTime = new Date(rawStartTime.replace(/(am|pm)/, ''));
+            //console.log('Start time is', startTime);
+            var deadline = new Date(rawDeadline.replace(/(am|pm)/, ''));
+            var timeTotal = Math.abs(deadline - startTime);
+            var timeTotalPercent = Math.abs(timeTotal / 60000);
+            console.log('value for total time in minutes of', taskName, 'is', timeTotalPercent);
+            var nowTillDeadline = Math.abs(deadline - now);
+            var nowTillDeadlinePercent = Math.abs(nowTillDeadline / 60000);
+            var timeElapsed = Math.abs(timeTotalPercent - nowTillDeadlinePercent);
+            var timeElapsedPercent = Math.abs((timeElapsed / timeTotalPercent) * 100);
+                
+            bar.style.width = timeElapsedPercent + '%';
+            
+            if (timeElapsedPercent >= 99) {
+                bar.style.width = '100%';
+                clearInterval(interval);
+            }
+        }
+    }, (1*1000))
+}
+
+fillBar()
+    
+</script>
+
+
+
+@* <script>
+    function progress() {
+
+        var now = new Date();
+        var startTime = @Html.DisplayFor(modelItem => item.Starttime);
+        var deadline = @Html.DisplayFor(modelItem => item.Deadline);
+        var timeTotal = Math.abs(deadline - startTime);
+        var timeRemaining = Math.abs(deadline - now);
+
+        var progressBarWidth = timeRemaining * $element.width() / timeTotal;
+
+        $element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
+        setInterval(frame, 6000);
+        if(timeRemaining > 0) {
+            setTimeout(function() {
+                progress(timeRemainig - 1, timeTotal, $element);
+            }, 1000);
+        }
+
+    }
+</script> *@
