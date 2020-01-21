@@ -13,9 +13,9 @@ namespace CRM3.Models
         public DateTime StartTime { get; set; }
         [DisplayName("Deadline")]
         public DateTime Deadline { get; set; }
-        [DisplayName("Importance")]
+        [DisplayName("Important")]
         public bool Important { get; set; }
-        [DisplayName("Complexity")]
+        [DisplayName("Complex")]
         public bool HighComplexity { get; set; }
 
     }

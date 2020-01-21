@@ -22,10 +22,37 @@ namespace CRM3.Controllers
         }
 
         // GET: Dashboard
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            return View(await _context.Tasks.ToListAsync());
-        }
+            ViewData["StartTimeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "starttime_desc" : "";
+            ViewData["DeadlineSortParm"] = sortOrder == "Deadline" ? "deadline_desc" : "Deadline";
+            ViewData["CurrentFilter"] = searchString;
+
+            var tasks = from t in _context.Tasks
+                        select t;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(t => t.TaskName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "starttime_desc":
+                    tasks = tasks.OrderByDescending(t => t.StartTime);
+                    break;
+                case "Deadline":
+                    tasks = tasks.OrderBy(t => t.Deadline);
+                    break;
+                case "deadline_desc":
+                    tasks = tasks.OrderByDescending(t => t.Deadline);
+                    break;
+                default:
+                    tasks = tasks.OrderBy(t => t.StartTime);
+                    break;
+            }
+            return View(await tasks.AsNoTracking().ToListAsync());
+                }
 
         // GET: Dashboard/Details/5
         public async Task<IActionResult> Details(string id)
@@ -93,7 +120,7 @@ namespace CRM3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("TaskName,Deadline,Important,HighComplexity")] Tasks tasks)
+        public async Task<IActionResult> Edit(string id, [Bind("TaskName,StartTime,Deadline,Important,HighComplexity")] Tasks tasks)
         {
             if (id != tasks.TaskName)
             {
