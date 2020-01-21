@@ -30,7 +30,7 @@ namespace CRM3.Controllers
 
             if (!String.IsNullOrEmpty(id))
             {
-                companies = companies.Where(s => s.CompanyName.Contains(id));
+                companies = companies.Where(s => s.CompanyName.Contains(id) || s.GroupName.Contains(id));
             }
 
             return View(await companies.ToListAsync());
@@ -65,7 +65,7 @@ namespace CRM3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyName,PublicEmail,ContactPersonOne,PersonalEmailOne,ContactPersonTwo,PersonalEmailTwo,FirstContactDate,SecondContactDate,Comments,AccountManager")] CompanyDetails companyDetails)
+        public async Task<IActionResult> Create([Bind("CompanyName,PublicEmail,ContactPersonOne,PersonalEmailOne,ContactPersonTwo,PersonalEmailTwo,DateCreated,GroupName,Comments,AccountManager")] CompanyDetails companyDetails)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace CRM3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("CompanyName,PublicEmail,ContactPersonOne,PersonalEmailOne,ContactPersonTwo,PersonalEmailTwo,FirstContactDate,SecondContactDate,Comments,AccountManager")] CompanyDetails companyDetails)
+        public async Task<IActionResult> Edit(string id, [Bind("CompanyName,PublicEmail,ContactPersonOne,PersonalEmailOne,ContactPersonTwo,PersonalEmailTwo,DateCreated,GroupName,Comments,AccountManager")] CompanyDetails companyDetails)
         {
             if (id != companyDetails.CompanyName)
             {

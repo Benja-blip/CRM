@@ -9,7 +9,7 @@
 <p>
     <ul>
         <li>
-            <a asp-action="Create">Create New</a>
+            <a asp-action="Create">Add Company</a>
         </li>
         <li>
             <a href="/dashboard/index">View Dashboard</a>
@@ -19,8 +19,9 @@
 <p>
     <form asp-controller="Companies" asp-action="Index" method="get">
         <p>
-            Company Name:<input type="text" name="id">
+            Company or Group Name:<input type="text" name="id" style="margin-left:10px;" />
             <input type="submit" value="Search" />
+            <a style="margin-left:10px;" asp-action="Index">View All</a>
         </p>
     </form>
 </p>
@@ -28,43 +29,43 @@
 
 @foreach (var item in Model) {
     <div>
-        <button type="button" class="collapsible">@Html.DisplayFor(model => item.CompanyName)</button>
+        <button style="margin:1px;" type="button" class="collapsible">@Html.DisplayFor(model => item.CompanyName)</button>
         <div class="content">
             <h5 class="mb-0">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="width-20%">
+                            <th style="width:20%;">
                                 @Html.DisplayNameFor(model => model.PublicEmail)
                             </th>
-                            <th class="width-20%">
+                            <th style="width:20%;">
                                 @Html.DisplayNameFor(model => model.ContactPersonOne)
                             </th>
-                            <th class="width-20%">
+                            <th style="width:20%;">
                                 @Html.DisplayNameFor(model => model.PersonalEmailOne)
                             </th>
-                            <th class="width-20%">
+                            <th style="width:20%;">
                                 @Html.DisplayNameFor(model => model.ContactPersonTwo)
                             </th>
-                            <th class="width-20%">
+                            <th style="width:20%;">
                                 @Html.DisplayNameFor(model => model.PersonalEmailTwo)
                             </th>
                         </tr>
                     </thead>
                     <tr>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.PublicEmail)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.ContactPersonOne)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.PersonalEmailOne)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.ContactPersonTwo)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.PersonalEmailTwo)
                         </td>
                     </tr>
@@ -73,37 +74,37 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th class="width-20%">
-                            @Html.DisplayNameFor(model => model.FirstContactDate)
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.DateCreated)
                         </th>
-                        <th class="width-20%">
-                            @Html.DisplayNameFor(model => model.SecondContactDate)
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.GroupName)
                         </th>
-                        <th class="width-20%">
+                        <th style="width:20%;">
                             @Html.DisplayNameFor(model => model.Comments)
                         </th>
-                        <th class="width-20%">
+                        <th style="width:20%;">
                             @Html.DisplayNameFor(model => model.AccountManager)
                         </th>
-                        <th>
+                        <th style="width:20%;">
                             <a onclick="setCookie()" asp-controller="Dashboard" asp-action="Create">Create Task</a>
                         </th>
                     </tr>
                     </thead>
                     <tr>
-                        <td class="width-20%">
-                            @Html.DisplayFor(modelItem => item.FirstContactDate)
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.DateCreated)
                         </td>
-                        <td class="width-20%">
-                            @Html.DisplayFor(modelItem => item.SecondContactDate)
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.GroupName)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.Comments)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             @Html.DisplayFor(modelItem => item.AccountManager)
                         </td>
-                        <td class="width-20%">
+                        <td style="width:20%;">
                             <a asp-action="Edit" asp-route-id="@item.CompanyName">Edit</a> |
                             <a asp-action="Details" asp-route-id="@item.CompanyName">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.CompanyName">Delete</a>
@@ -147,7 +148,10 @@
   color: black;
   float: right;
   margin-left: 5px;
+  focus: 
 }
+
+.collapsible:focus {outline:0 !important;}
 
 .active:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
