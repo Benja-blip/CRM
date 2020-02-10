@@ -1,0 +1,190 @@
+@model IEnumerable<CRM3.Models.Tasks>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">Dashboard</h1>
+    <p>
+        <a asp-action="Create">Create New Task</a>
+    </p>
+    <p>
+        <a asp-controller="Companies" asp-action="Index">View Companies</a>
+    </p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <button class="btn btn-default" onclick="window.location.href = '/dashboard/index';">View All</button>
+        </p>
+    </div>
+</form>
+<body>
+<div>
+<table class="table" id="tbl">
+    <thead>
+        <tr class="row">
+            <th style="width:15%">
+                @Html.DisplayNameFor(model => model.TaskName)
+            </th>
+            <th style="width:10%">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StartTimeSortParm"]">@Html.DisplayNameFor(model => model.StartTime)</a>
+            </th>
+            <th style="width:10%">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DeadlineSortParm"]">@Html.DisplayNameFor(model => model.Deadline)</a>
+            </th>
+            <th style="width:10%">
+                @Html.DisplayNameFor(model => model.Important)
+            </th>
+            <th style="width:10%">
+                @Html.DisplayNameFor(model => model.HighComplexity)
+            </th>
+            <th style="width:10%">
+                Options
+            </th>
+            <th style="width:35%; text-align:center;">
+                Time Elapsed
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="row" id="tablerow">
+            <td style="width:15%">
+                @Html.DisplayFor(modelItem => item.TaskName)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => item.Important)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => item.HighComplexity)
+            </td>
+            <td style="width:10%">
+                <a asp-action="Edit" asp-route-id="@item.TaskName">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TaskName">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TaskName">Delete</a>
+            </td>
+            <td style="width:35%">
+                <div id="progressBar">
+                    <div class="bar" id="actualBar"></div>
+                </div>
+                <div class="timeDisplay" style="text-align:center;"></div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</body>
+
+<style>
+#progressBar {
+  border-radius: 15px;
+  width: 90%;
+  margin: 5px auto;
+  height: 20px;
+  background-color: grey;
+}
+
+#progressBar div {
+  border-radius: 15px;
+  height: 100%;
+  text-align: right;
+  padding: 5px;
+  line-height: 20px; /* same as #progressBar height if we want text middle aligned */
+  width: function fillBar(timeElapsedPercent);
+  background-color: whitesmoke;
+  box-sizing: border-box;
+}
+</style>
+
+
+<script>
+
+var Table = document.getElementById("tbl");
+var Row = document.getElementsByTagName("tr");
+var rowDisplay = document.getElementsByTagName("td");
+
+function fillBar() {
+
+    //console.log(taskName);
+
+const interval = setInterval(() => {
+
+    var i;
+    //var bar = document.querySelectorAll('.bar'), i;
+
+    for (i = 1; i < Table.rows.length; i += 1) {
+        
+        var taskName = Table.rows[i].cells[0].innerText;
+        var rawStartTime = Table.rows[i].cells[1].innerText;
+        var rawDeadline = Table.rows[i].cells[2].innerText;
+        var bar = Table.rows[i].cells[6].getElementsByClassName("bar").item(0);
+        console.log(bar)
+        //var bar = document.querySelectorAll('.bar');
+        var now = new Date();
+        var startTime = new Date(rawStartTime.replace(/(am|pm)/, ''));
+        console.log('Start time is', startTime);
+        var deadline = new Date(rawDeadline.replace(/(am|pm)/, ''));
+        var timeTotal = Math.abs(deadline - startTime);
+        var timeTotalPercent = Math.abs(timeTotal / 60000);
+        var nowTillDeadline = Math.abs(deadline - now);
+        var nowTillDeadlinePercent = Math.abs(nowTillDeadline / 60000);
+        var timeElapsed = Math.abs(timeTotalPercent - nowTillDeadlinePercent);
+        var timeElapsedPercent = Math.abs((timeElapsed / timeTotalPercent) * 100);
+        var remainingRounded = Math.round(nowTillDeadlinePercent);
+
+        var seconds = Math.floor(nowTillDeadline / 1000);
+        var weeks = Math.floor(seconds / 604800)
+        var days = Math.floor((seconds / 86400) % 7);
+        var hours = Math.floor((seconds / 3600) % 24);
+        var minutes = Math.floor((seconds / 60) % 60);
+
+        //Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = 'Time remaining in minutes: ' + remainingRounded;
+        //var display = Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText
+        //display = 'Time remaining:' + nowTillDeadlinePercent;
+            
+        bar.style.width = timeElapsedPercent + '%'; 
+        
+        if(Math.floor(weeks >= 1) && Math.floor(days >= 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = weeks + 'w ' + days + 'd remaining';
+        }
+        if(Math.floor(weeks >= 1) && Math.floor(days < 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = weeks + 'w remaining';
+        }
+        if(Math.floor(weeks < 1) && Math.floor(days >= 1) && Math.floor(hours >= 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = days + 'd ' + hours + 'h ' + minutes + 'm remaining';
+        }
+        if(Math.floor(weeks < 1) && Math.floor(days >= 1) && Math.floor(hours < 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = days + 'd ' + minutes + 'm remaining';
+        }
+        if(Math.floor(weeks < 1) && Math.floor(days < 1) && Math.floor(hours >= 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = hours + "h " + minutes + "m remaining";
+        }
+        if(Math.floor(weeks < 1) && Math.floor(days < 1) && Math.floor(hours < 1) && Math.floor(minutes >= 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = minutes + "m remaining";
+        }
+        if(Math.floor(weeks < 1) && Math.floor(days < 1) && Math.floor(hours < 1) && Math.floor(minutes < 1) && !Math.abs(deadline - now <= 0)) {
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = seconds + " seconds remaining";
+        } 
+        if(Math.abs(deadline - now <= 0)) {
+            bar.style.width = '100%';
+            Table.rows[i].cells[6].getElementsByClassName("timeDisplay").item(0).innerText = 'Deadline has passed';
+        }   
+            //clearInterval(interval);
+    }
+}, (1*1000))
+}
+
+fillBar()
+
+</script>
+
+

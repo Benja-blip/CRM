@@ -1,0 +1,47 @@
+
+<div class="container mt-5">
+  <h1 style="text-align:center;">Welcome</h1>
+</div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col text-center">
+        <button style="margin:1px;" type="button" class="ebButton" onclick="window.location.href = '/companies/index';">View Companies</button>
+    </div>
+    <div class="col text-center">
+        <button style="margin:1px;" type="button" class="ebButton" onclick="window.location.href = '/dashboard/index';">View Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<style>
+
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.ebButton {
+  border-radius: 10px;
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 50%;
+  border: 0;
+  text-align: center;
+  outline: none;
+  font-size: 20px;
+  float: center;
+}
+
+.ebButton:focus {outline:0;}
+
+.active, .ebButton:hover {
+  background-color: #ccc;
+}
+
+</style>

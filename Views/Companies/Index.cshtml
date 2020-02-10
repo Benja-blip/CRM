@@ -1,0 +1,185 @@
+@model IEnumerable<CRM3.Models.CompanyDetails>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <ul>
+        <li>
+            <a asp-action="Create">Add Company</a>
+        </li>
+        <li>
+            <a href="/dashboard/index">View Dashboard</a>
+        </li>
+    </ul>
+</p>
+<p>
+    <form asp-controller="Companies" asp-action="Index" method="get">
+        <p>
+            Company or Group Name:<input type="text" name="id" style="margin-left:10px;" />
+            <input type="submit" value="Search" />
+            <a style="margin-left:10px;" asp-action="Index">View All</a>
+        </p>
+    </form>
+</p>
+
+
+@foreach (var item in Model) {
+    <div>
+        <button style="margin:1px;" type="button" class="collapsible">@Html.DisplayFor(model => item.CompanyName)</button>
+        <div class="content">
+            <h5 class="mb-0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:20%;">
+                                @Html.DisplayNameFor(model => model.PublicEmail)
+                            </th>
+                            <th style="width:20%;">
+                                @Html.DisplayNameFor(model => model.ContactPersonOne)
+                            </th>
+                            <th style="width:20%;">
+                                @Html.DisplayNameFor(model => model.PersonalEmailOne)
+                            </th>
+                            <th style="width:20%;">
+                                @Html.DisplayNameFor(model => model.ContactPersonTwo)
+                            </th>
+                            <th style="width:20%;">
+                                @Html.DisplayNameFor(model => model.PersonalEmailTwo)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.PublicEmail)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.ContactPersonOne)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.PersonalEmailOne)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.ContactPersonTwo)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.PersonalEmailTwo)
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.DateCreated)
+                        </th>
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.GroupName)
+                        </th>
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.Comments)
+                        </th>
+                        <th style="width:20%;">
+                            @Html.DisplayNameFor(model => model.AccountManager)
+                        </th>
+                        <th style="width:20%;">
+                            <a onclick="setCookie()" asp-controller="Dashboard" asp-action="Create">Create Task</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.GroupName)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.Comments)
+                        </td>
+                        <td style="width:20%;">
+                            @Html.DisplayFor(modelItem => item.AccountManager)
+                        </td>
+                        <td style="width:20%;">
+                            <a asp-action="Edit" asp-route-id="@item.CompanyName">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.CompanyName">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.CompanyName">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </h5>
+        </div>
+    </div>
+}
+
+<style>
+.collapsible {
+  border-radius: 10px;
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 50%;
+  border: 0;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: transparent;
+}
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: black;
+  float: right;
+  margin-left: 5px;
+  focus: 
+}
+
+.collapsible:focus {outline:0 !important;}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+}
+
+</style>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        }
+    });
+    }
+</script>
+
+<script>
+function setCookie() {
+    console.log(this)
+}
+</script>

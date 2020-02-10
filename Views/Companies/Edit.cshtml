@@ -1,0 +1,74 @@
+@model CRM3.Models.CompanyDetails
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CompanyDetails</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CompanyName" />
+            <div class="form-group">
+                <label asp-for="PublicEmail" class="control-label"></label>
+                <input asp-for="PublicEmail" class="form-control" />
+                <span asp-validation-for="PublicEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPersonOne" class="control-label"></label>
+                <input asp-for="ContactPersonOne" class="form-control" />
+                <span asp-validation-for="ContactPersonOne" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonalEmailOne" class="control-label"></label>
+                <input asp-for="PersonalEmailOne" class="form-control" />
+                <span asp-validation-for="PersonalEmailOne" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPersonTwo" class="control-label"></label>
+                <input asp-for="ContactPersonTwo" class="form-control" />
+                <span asp-validation-for="ContactPersonTwo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonalEmailTwo" class="control-label"></label>
+                <input asp-for="PersonalEmailTwo" class="form-control" />
+                <span asp-validation-for="PersonalEmailTwo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GroupName" class="control-label"></label>
+                <input asp-for="GroupName" class="form-control" />
+                <span asp-validation-for="GroupName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comments" class="control-label"></label>
+                <input asp-for="Comments" class="form-control" />
+                <span asp-validation-for="Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccountManager" class="control-label"></label>
+                <input asp-for="AccountManager" class="form-control" />
+                <span asp-validation-for="AccountManager" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
