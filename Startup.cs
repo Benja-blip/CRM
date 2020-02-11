@@ -31,21 +31,15 @@ namespace CRM3
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CRM3LoginContext>(options =>
-                options.UseMySql("Server=localhost;Database=CRM3Login;User=root;Password=Sergen1ver2;", // replace with your Connection String
+                options.UseMySql("ConnectionString;", // replace with your Connection String
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(5, 7, 28), ServerType.MySql); // replace with your Server Version and Type
                     }
             ));
-
-            // services.AddDbContext<AppDbContext>(config => {
-            //     config.UseInMemoryDatabase("Memory");
-            // });
             services.AddIdentity<IdentityUser, IdentityRole>(config => {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false;
@@ -59,13 +53,10 @@ namespace CRM3
                 config.Cookie.Name = "Identity.Cookie";
                 config.LoginPath = "/Account/Login";
             });
-            // services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            // services.AddReact();
-            // services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
-            //    .AddChakraCore();
+            
             services.AddControllersWithViews();
             services.AddDbContext<DashboardContext>(options =>
-                options.UseMySql("Server=localhost;Database=CRM3Dashboard;User=root;Password=Sergen1ver2;", // replace with your Connection String
+                options.UseMySql("ConnectionString;", // replace with your Connection String
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(5, 7, 28), ServerType.MySql); // replace with your Server Version and Type
@@ -73,14 +64,12 @@ namespace CRM3
             ));
 
             services.AddDbContext<CompanyContext>(options =>
-                options.UseMySql("Server=localhost;Database=CRM3CompanyDetails;User=root;Password=Sergen1ver2;", // replace with your Connection String
+                options.UseMySql("ConnectionString;", // replace with your Connection String
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(5, 7, 28), ServerType.MySql); // replace with your Server Version and Type
                     }
             ));
-            // return services.BuildServiceProvider();
-            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
